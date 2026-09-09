@@ -94,19 +94,19 @@
             <form id="contact-form" novalidate>
                 <div class="form-field">
                 <label for="name">이름</label>
-                <input id="name" name="name" type="text" required />
+                <input id="name" name="name" type="text" required aria-describedby="name-error" />
                 <p class="error-message" id="name-error"></p>
                 </div>
 
                 <div class="form-field">
                 <label for="email">이메일</label>
-                <input id="email" name="email" type="email" required />
+                <input id="email" name="email" type="email" required aria-describedby="email-error" />
                 <p class="error-message" id="email-error"></p>
                 </div>
 
                 <div class="form-field">
                 <label for="message">메시지</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
+                <textarea id="message" name="message" rows="5" required aria-describedby="message-error"></textarea>
                 <p class="error-message" id="message-error"></p>
                 </div>
 
