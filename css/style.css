@@ -14,6 +14,19 @@
   --border-radius: 16px;
 }
 
+[data-theme="dark"] {
+  --color-background: #0f172a;
+  --color-surface: #111827;
+  --color-text: #f8fafc;
+  --color-muted: #cbd5e1;
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-border: #334155;
+  --color-header-scrolled: #172554;
+
+  color-scheme: dark;
+}
+
 /* 2. 브라우저 기본 스타일 정리 */
 * {
   box-sizing: border-box;
