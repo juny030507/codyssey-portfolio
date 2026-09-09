@@ -28,3 +28,24 @@ navLinks.forEach((link) => {
 });
 
 renderMenu();
+
+const siteHeader = document.querySelector(".site-header");
+const scrollTopButton = document.querySelector(".scroll-top");
+
+const updateScrollUI = () => {
+    const currentScrollY = window.scrollY;
+
+    siteHeader.classList.toggle("scrolled", currentScrollY >= 60);
+    scrollTopButton.classList.toggle("visible", currentScrollY >= 300);
+}; 
+
+window.addEventListener("scroll", updateScrollUI);
+
+scrollTopButton.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});
+
+updateScrollUI();
