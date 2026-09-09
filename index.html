@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>나의 포트폴리오</title>
+
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="js/main.js" defer></script>
+    </head>
+    
+   <body>
+        <header class="site-header">
+            <nav class="navbar" aria-label="주요 메뉴">
+            <a class="logo" href="#hero">My Portfolio</a>
+
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-label="메뉴 열기"
+                aria-expanded="false"
+            >
+                ☰
+            </button>
+
+            <ul class="nav-menu">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <button class="theme-toggle" type="button" aria-label="다크 모드 전환">
+                🌙
+            </button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="hero" class="hero">
+            <p>안녕하세요!</p>
+            <h1>저는 이름입니다.</h1>
+            <p>배우고 만들며 성장하는 웹 개발자입니다.</p>
+
+            <div class="hero-actions">
+                <a href="#projects">프로젝트 보기</a>
+                <a href="#contact">연락하기</a>
+            </div>
+            </section>
+
+            <section id="about" class="about">
+            <h2>About Me</h2>
+
+            <div class="about-content">
+                <div class="profile-placeholder">PHOTO</div>
+
+                <div>
+                <p>
+                    이곳에 자신을 소개하는 내용을 작성합니다. 관심 분야와 웹 개발을
+                    배우는 이유를 간단하게 적어보세요.
+                </p>
+                </div>
+            </div>
+            </section>
+
+            <section id="skills" class="skills">
+            <h2>Skills</h2>
+
+            <ul class="skill-list">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>GitHub</li>
+            </ul>
+            </section>
+
+            <section id="projects" class="projects">
+            <h2>Projects</h2>
+
+            <p id="project-status">프로젝트를 불러올 준비가 되었습니다.</p>
+
+            <div id="project-list" class="project-list">
+                <article class="project-card">
+                <h3>프로젝트 예시</h3>
+                <p>나중에 이 자리에 GitHub 프로젝트가 표시됩니다.</p>
+                </article>
+            </div>
+            </section>
+
+            <section id="contact" class="contact">
+            <h2>Contact</h2>
+
+            <form id="contact-form" novalidate>
+                <div class="form-field">
+                <label for="name">이름</label>
+                <input id="name" name="name" type="text" required />
+                <p class="error-message" id="name-error"></p>
+                </div>
+
+                <div class="form-field">
+                <label for="email">이메일</label>
+                <input id="email" name="email" type="email" required />
+                <p class="error-message" id="email-error"></p>
+                </div>
+
+                <div class="form-field">
+                <label for="message">메시지</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+                <p class="error-message" id="message-error"></p>
+                </div>
+
+                <button type="submit">보내기</button>
+
+                <p id="form-result"></p>
+            </form>
+            </section>
+        </main>
+
+        <button class="scroll-top" type="button" aria-label="페이지 맨 위로 이동">
+            ↑
+        </button>
+
+        <footer class="site-footer">
+            <p>© 2026 이름. All rights reserved.</p>
+
+            <div class="social-links">
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
+                GitHub
+            </a>
+            </div>
+        </footer>
+    </body>
+</html>
