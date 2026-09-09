@@ -1,3 +1,5 @@
+document.documentElement.classList.add("js");
+
 const menuToggle = document.querySelector(".menu-toggle");
 const navMenu = document.querySelector(".nav-menu");
 const navLinks = document.querySelectorAll(".nav-menu a");
@@ -103,3 +105,27 @@ systemThemeQuery.addEventListener("change", (event) => {
 });
 
 renderTheme();
+
+
+const revealElements = 
+  document.querySelectorAll(".reveal");
+
+const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+                return;
+            }
+
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+        });
+    },
+    {
+        threshold: 0.2,
+    }
+);
+
+revealElements.forEach((element) => {
+    revealObserver.observe(element);
+});
