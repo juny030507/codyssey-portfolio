@@ -490,3 +490,48 @@ main section:not(.hero) h2 {
 #form-result.success {
   color: #16a34a;
 }
+
+/* 18. GitHub 프로젝트 카드 */
+.project-card {
+  display: flex;
+  min-height: 240px;
+  flex-direction: column;
+}
+
+.project-card > p {
+  flex-grow: 1;
+}
+
+.project-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-top: 20px;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.project-link {
+  align-self: flex-start;
+  margin-top: 20px;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.project-link:hover {
+  text-decoration: underline;
+}
+
+.retry-button {
+  padding: 10px 16px;
+  color: #ffffff;
+  background-color: var(--color-primary);
+  border: 0;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.retry-button:hover {
+  background-color: var(--color-primary-dark);
+}

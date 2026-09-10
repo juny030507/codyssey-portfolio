@@ -284,6 +284,66 @@ const setProjectStatus = (message) => {
     projectStatus.textContent = message;
 };
 
+let allProjects = [];
+
+const escapeHtml = (value) => {
+    const temporaryElement =
+        document.createElement("div");
+
+    temporaryElement.textContent = value ?? "";
+    
+    return temporaryElement.innerHTML;
+};
+
+const createProjectCard = ({
+    name,
+    description,
+    html_url: repositoryUrl,
+    language,
+    stargazers_count: stars,
+}) => {
+    const safeName = escapeHtml(name);
+
+    const safeDescription = escapeHtml(
+        description || "등록된 설명이 없습니다."
+    );
+
+    const safeLanguage = escapeHtml(
+        language || "언어 미지정"
+    );
+
+    return `
+      <article class="project-card">
+        <h3>${safeName}</h3>
+
+        <p>${safeDescription}</p>
+
+        <div class="project-meta">
+            <span>${safeLanguage}</span>
+            <span>⭐ ${stars}</span>
+        </div>
+
+        <a
+          class="project-link"
+          href="${repositoryUrl}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub 저장소 새 탭에서 열기"
+        >
+          저장소 보기
+        </a>
+      </article>
+      `;
+};
+
+const renderProjects = (projects) => {
+    const cardsHtml = projects
+      .map(createProjectCard)
+      .join("");
+    projectList.innerHTML = cardsHtml;
+};
+
+
 const loadGitHubProjects = async () => {
     setProjectStatus("프로젝트를 불러오는 중...");
     projectList.innerHTML = "";
@@ -299,7 +359,9 @@ const loadGitHubProjects = async () => {
 
         const projects = await response.json();
 
-        if (projects.length === 0) {
+        allProjects = projects;
+
+        if (allProjects.length === 0) {
             setProjectStatus(
                 "표시할 프로젝트가 없습니다."
             );
@@ -307,15 +369,32 @@ const loadGitHubProjects = async () => {
         }
 
         setProjectStatus(
-            `${projects.length}개의 프로젝트를 불러왔습니다.`
+            `${allProjects.length}개의 프로젝트를 불러왔습니다.`
         );
 
-        console.log(projects);
+        renderProjects(allProjects);
     } catch (error) {
         console.error(error);
 
-        setProjectStatus(
-            "프로젝트를 불러올 수 없습니다."
+        projectStatus.innerHTML = `
+          <p>프로젝트를 불러올 수 없습니다.</p>
+
+          <button
+            class="retry-button"
+            type="button"
+          >
+            다시 시도
+          </button>
+        `;
+
+        const retryButton = 
+          projectStatus.querySelector(
+            ".retry-button"
+          );
+
+        retryButton.addEventListener(
+            "click",
+            loadGitHubProjects
         );
     }
 };
