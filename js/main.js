@@ -269,3 +269,55 @@ formFields.forEach(({ input, error }) => {
         );
     });
 });
+
+const githubUsername = "juny030507";
+
+const gitHubApiUrl = `https://api.github.com/users/${githubUsername}/repos?sort=updated&per_page=12`;
+
+const projectStatus = 
+  document.querySelector("#project-status");
+
+const projectList =
+  document.querySelector("#project-list");
+
+const setProjectStatus = (message) => {
+    projectStatus.textContent = message;
+};
+
+const loadGitHubProjects = async () => {
+    setProjectStatus("프로젝트를 불러오는 중...");
+    projectList.innerHTML = "";
+
+    try {
+        const response = await fetch(gitHubApiUrl);
+
+        if (!response.ok) {
+            throw new Error(
+                `GitHub API 오류: ${response.status}`
+            );
+        }
+
+        const projects = await response.json();
+
+        if (projects.length === 0) {
+            setProjectStatus(
+                "표시할 프로젝트가 없습니다."
+            );
+            return;
+        }
+
+        setProjectStatus(
+            `${projects.length}개의 프로젝트를 불러왔습니다.`
+        );
+
+        console.log(projects);
+    } catch (error) {
+        console.error(error);
+
+        setProjectStatus(
+            "프로젝트를 불러올 수 없습니다."
+        );
+    }
+};
+
+loadGitHubProjects();
