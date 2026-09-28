@@ -106,6 +106,33 @@ systemThemeQuery.addEventListener("change", (event) => {
 
 renderTheme();
 
+const typingText = document.querySelector(".typing-text");
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+);
+
+if (!prefersReducedMotion.matches) {
+  const characters = Array.from(typingText.textContent);
+  let characterIndex = 0;
+
+  typingText.textContent = "";
+
+  const typeNextCharacter = () => {
+    typingText.textContent += characters[characterIndex];
+    characterIndex += 1;
+
+    if (characterIndex < characters.length) {
+      window.setTimeout(typeNextCharacter, 85);
+    } else {
+      typingText.classList.add("typing-complete");
+    }
+  };
+
+  typeNextCharacter();
+} else {
+  typingText.classList.add("typing-complete");
+}
+
 
 const revealElements = 
   document.querySelectorAll(".reveal");
@@ -153,6 +180,18 @@ const messageError =
 
 const formResult = 
     document.querySelector("#form-result");
+
+const submitButton =
+    document.querySelector("#submit-button");
+
+const setFormResult = (message, state) => {
+    formResult.textContent = message;
+    formResult.classList.remove("error", "success");
+
+    if (state) {
+        formResult.classList.add(state);
+    }
+};
 
 
 const showFieldError = (
@@ -219,28 +258,69 @@ const validateContactForm = () => {
     return isFormValid;
 };
 
-contactForm.addEventListener("submit", (event) => {
+contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    formResult.textContent = "";
-    formResult.classList.remove("error", "success");
+    if (submitButton.disabled) {
+        return;
+    }
+
+    setFormResult("");
 
     const isFormValid = validateContactForm();
 
     if (!isFormValid) {
-        formResult.textContent = 
-        "입력 내용을 다시 확인해주세요.";
-
-        formResult.classList.add("error");
+        setFormResult("입력 내용을 다시 확인해주세요.", "error");
+        contactForm.querySelector(".is-invalid")?.focus();
         return;
     }
 
-    formResult.textContent =
-      "메시지가 성공적으로 작성되었습니다.";
+    const formId = contactForm.dataset.formspreeId;
 
-    formResult.classList.add("success");
-    
-    contactForm.reset();
+    if (!formId) {
+        setFormResult(
+            "문의 전송 설정을 마무리하는 중입니다. 잠시 후 다시 시도해주세요.",
+            "error"
+        );
+        return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "전송 중...";
+    contactForm.setAttribute("aria-busy", "true");
+    setFormResult("메시지를 전송하는 중입니다.");
+
+    try {
+        const response = await fetch(
+            `https://formspree.io/f/${formId}`,
+            {
+                method: "POST",
+                body: new FormData(contactForm),
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Formspree 오류: ${response.status}`
+            );
+        }
+
+        setFormResult("메시지가 전송되었습니다. 감사합니다!", "success");
+        contactForm.reset();
+    } catch (error) {
+        console.error(error);
+        setFormResult(
+            "메시지를 전송하지 못했습니다. 잠시 후 다시 시도해주세요.",
+            "error"
+        );
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "보내기";
+        contactForm.removeAttribute("aria-busy");
+    }
 });
 
 const formFields = [
@@ -261,12 +341,7 @@ const formFields = [
 formFields.forEach(({ input, error }) => {
     input.addEventListener("input", () => {
         clearFieldError(input, error);
-
-        formResult.textContent = "";
-        formResult.classList.remove(
-            "error",
-            "success"
-        );
+        setFormResult("");
     });
 });
 
@@ -280,11 +355,16 @@ const projectStatus =
 const projectList =
   document.querySelector("#project-list");
 
+const projectFilters =
+    document.querySelector("#project-filters");
+
 const setProjectStatus = (message) => {
     projectStatus.textContent = message;
 };
 
 let allProjects = [];
+
+let selectedLanguage = "전체";
 
 const escapeHtml = (value) => {
     const temporaryElement =
@@ -309,8 +389,9 @@ const createProjectCard = ({
     );
 
     const safeLanguage = escapeHtml(
-        language || "언어 미지정"
+        language || "기타"
     );
+    const safeRepositoryUrl = escapeHtml(repositoryUrl);
 
     return `
       <article class="project-card">
@@ -325,10 +406,10 @@ const createProjectCard = ({
 
         <a
           class="project-link"
-          href="${repositoryUrl}"
+          href="${safeRepositoryUrl}"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="GitHub 저장소 새 탭에서 열기"
+          aria-label="${safeName} GitHub 저장소 새 탭에서 열기"
         >
           저장소 보기
         </a>
@@ -343,10 +424,76 @@ const renderProjects = (projects) => {
     projectList.innerHTML = cardsHtml;
 };
 
+const renderLanguageFilters = () => {
+    const languages = [
+        "전체",
+        ...new Set(
+            allProjects.map(
+                ({language}) => language || "기타"
+            )
+        ),
+    ];
+
+    projectFilters.replaceChildren();
+
+    languages.forEach((language) => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "project-filter-button";
+        button.textContent = language;
+        button.dataset.language = language;
+        projectFilters.append(button);
+    });
+
+    updateLanguageFilterButtons();
+};
+
+const updateLanguageFilterButtons = () => {
+    projectFilters
+      .querySelectorAll(".project-filter-button")
+      .forEach((button) => {
+          const isSelected =
+            button.dataset.language === selectedLanguage;
+
+          button.classList.toggle("active", isSelected);
+          button.setAttribute("aria-pressed", String(isSelected));
+      });
+};
+
+projectFilters.addEventListener("click", (event) => {
+    const button = event.target.closest(".project-filter-button");
+
+    if (!button || !projectFilters.contains(button)) {
+        return;
+    }
+
+    selectedLanguage = button.dataset.language;
+    updateLanguageFilterButtons();
+    renderFilteredProjects();
+});
+
+const renderFilteredProjects = () => {
+    const filteredProjects =
+      selectedLanguage === "전체"
+        ? allProjects
+        : allProjects.filter(
+            ({ language }) =>
+              (language || "기타") ===
+              selectedLanguage
+        );
+
+    setProjectStatus(
+        `${selectedLanguage}: ${filteredProjects.length}개의 프로젝트를 표시합니다.`
+    );
+
+    renderProjects(filteredProjects);
+};
 
 const loadGitHubProjects = async () => {
     setProjectStatus("프로젝트를 불러오는 중...");
-    projectList.innerHTML = "";
+    projectList.replaceChildren();
+    projectFilters.replaceChildren();
 
     try {
         const response = await fetch(gitHubApiUrl);
@@ -368,11 +515,10 @@ const loadGitHubProjects = async () => {
             return;
         }
 
-        setProjectStatus(
-            `${allProjects.length}개의 프로젝트를 불러왔습니다.`
-        );
+        selectedLanguage = "전체";
+        renderLanguageFilters();
+        renderFilteredProjects();
 
-        renderProjects(allProjects);
     } catch (error) {
         console.error(error);
 
