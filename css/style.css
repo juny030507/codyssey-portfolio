@@ -6,12 +6,17 @@
   --color-muted: #475569;
   --color-primary: #2563eb;
   --color-primary-dark: #1d4ed8;
+  --color-on-primary: #ffffff;
   --color-border: #e2e8f0;
   --color-header-scrolled: #eff6ff;
+  --color-error: #b91c1c;
+  --color-success: #15803d;
 
   --container-width: 1120px;
   --header-height: 72px;
   --border-radius: 16px;
+  --font-body: Arial, sans-serif;
+  --section-space: 72px;
 }
 
 [data-theme="dark"] {
@@ -21,8 +26,11 @@
   --color-muted: #cbd5e1;
   --color-primary: #60a5fa;
   --color-primary-dark: #3b82f6;
+  --color-on-primary: #0f172a;
   --color-border: #334155;
   --color-header-scrolled: #172554;
+  --color-error: #fca5a5;
+  --color-success: #86efac;
 
   color-scheme: dark;
 }
@@ -41,8 +49,41 @@ body {
   margin: 0;
   background-color: var(--color-background);
   color: var(--color-text);
-  font-family: Arial, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
+}
+
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  padding: 8px 12px;
+  color: #ffffff;
+  background-color: #1e40af;
+  border-radius: 8px;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
 }
 
 a {
@@ -70,7 +111,7 @@ ul {
 main > section {
   width: min(calc(100% - 40px), var(--container-width));
   margin: 0 auto;
-  padding: 72px 0;
+  padding: var(--section-space) 0;
   scroll-margin-top: var(--header-height);
 }
 
@@ -109,6 +150,11 @@ main > section {
   color: var(--color-primary);
   font-size: 1.25rem;
   font-weight: 700;
+}
+
+.logo span {
+  color: var(--color-muted);
+  font-size: 0.8em;
 }
 
 .menu-toggle,
@@ -159,7 +205,7 @@ main > section {
   align-items: flex-start;
 }
 
-.hero > p:first-child {
+.hero-eyebrow {
   margin: 0;
   color: var(--color-primary);
   font-weight: 700;
@@ -167,11 +213,33 @@ main > section {
 
 .hero h1 {
   margin: 12px 0;
-  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-size: clamp(2rem, 8vw, 5rem);
   line-height: 1.15;
+  word-break: keep-all;
 }
 
-.hero h1 + p {
+.js .typing-text::after {
+  content: "";
+  display: inline-block;
+  height: 0.9em;
+  margin-left: 5px;
+  border-right: 3px solid var(--color-primary);
+  vertical-align: -0.08em;
+  animation: caret-blink 0.8s steps(1) infinite;
+}
+
+.js .typing-text.typing-complete::after {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.hero-subtitle {
   margin: 0;
   color: var(--color-muted);
   font-size: 1.125rem;
@@ -197,7 +265,7 @@ main > section {
 
 .hero-actions a:first-child {
   background-color: var(--color-primary);
-  color: #ffffff;
+  color: var(--color-on-primary);
 }
 
 .hero-actions a:hover {
@@ -242,24 +310,23 @@ main section:not(.hero) h2 {
   gap: 32px;
 }
 
-.profile-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+.profile-image {
+  display: block;
   width: 100%;
-  min-height: 280px;
-
-  color: var(--color-muted);
-  background-color: var(--color-surface);
-  border: 2px dashed var(--color-border);
+  max-width: 320px;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
   border-radius: var(--border-radius);
-  font-weight: 700;
 }
 
 .about-content p {
   margin: 0;
   color: var(--color-muted);
+}
+
+.about-content p + p {
+  margin-top: 16px;
 }
 
 /* 9. Skills 영역 */
@@ -281,6 +348,10 @@ main section:not(.hero) h2 {
 /* 10. Projects 영역 */
 #project-status {
   color: var(--color-muted);
+}
+
+#project-status p {
+  margin: 0 0 12px;
 }
 
 .project-list {
@@ -316,6 +387,11 @@ main section:not(.hero) h2 {
 }
 
 /* 11. Contact 폼 */
+.section-intro {
+  margin: -16px 0 24px;
+  color: var(--color-muted);
+}
+
 #contact-form {
   max-width: 640px;
   padding: 24px;
@@ -356,14 +432,14 @@ main section:not(.hero) h2 {
 .error-message {
   min-height: 24px;
   margin: 0;
-  color: #dc2626;
+  color: var(--color-error);
   font-size: 0.875rem;
 }
 
 #contact-form button {
   padding: 12px 20px;
 
-  color: #ffffff;
+  color: var(--color-on-primary);
   background-color: var(--color-primary);
   border: 0;
   border-radius: 10px;
@@ -372,6 +448,11 @@ main section:not(.hero) h2 {
 
 #contact-form button:hover {
   background-color: var(--color-primary-dark);
+}
+
+#contact-form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 /* 12. 스크롤 탑 버튼 */
@@ -383,7 +464,7 @@ main section:not(.hero) h2 {
   width: 48px;
   height: 48px;
 
-  color: #ffffff;
+  color: var(--color-on-primary);
   background-color: var(--color-primary);
   border: 0;
   border-radius: 50%;
@@ -425,8 +506,9 @@ main section:not(.hero) h2 {
     align-items: center;
   }
 
-  .profile-placeholder {
+  .profile-image {
     flex: 0 0 280px;
+    width: 280px;
   }
 }
 
@@ -457,7 +539,7 @@ main section:not(.hero) h2 {
   transform: translateY(0);
 }
 
-/* 움직임 최소화 설정을 사용하는 사용자 배 */
+/* 움직임 최소화 설정을 사용하는 사용자 배려 */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -467,6 +549,10 @@ main section:not(.hero) h2 {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .js .typing-text::after {
+    animation: none;
   }
 }
 
@@ -484,11 +570,11 @@ main section:not(.hero) h2 {
 }
 
 #form-result.error {
-  color: #dc2626;
+  color: var(--color-error);
 }
 
 #form-result.success {
-  color: #16a34a;
+  color: var(--color-success);
 }
 
 /* 18. GitHub 프로젝트 카드 */
@@ -496,10 +582,6 @@ main section:not(.hero) h2 {
   display: flex;
   min-height: 240px;
   flex-direction: column;
-}
-
-.project-card > p {
-  flex-grow: 1;
 }
 
 .project-meta {
@@ -514,7 +596,8 @@ main section:not(.hero) h2 {
 
 .project-link {
   align-self: flex-start;
-  margin-top: 20px;
+  margin-top: auto;
+  padding-top: 20px;
   color: var(--color-primary);
   font-weight: 700;
 }
@@ -523,9 +606,60 @@ main section:not(.hero) h2 {
   text-decoration: underline;
 }
 
+.project-languages,
+.project-language-note {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.project-languages h4 {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+}
+
+.project-languages ul {
+  display: grid;
+  gap: 12px;
+}
+
+.project-language-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+.project-language-row span:first-child {
+  min-width: 0;
+  color: var(--color-text);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.project-language-row span:last-child {
+  flex-shrink: 0;
+}
+
+.project-language-bar {
+  height: 6px;
+  margin-top: 5px;
+  overflow: hidden;
+  background-color: var(--color-border);
+  border-radius: 999px;
+}
+
+.project-language-bar span {
+  display: block;
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: inherit;
+}
+
 .retry-button {
   padding: 10px 16px;
-  color: #ffffff;
+  color: var(--color-on-primary);
   background-color: var(--color-primary);
   border: 0;
   border-radius: 8px;
@@ -534,4 +668,37 @@ main section:not(.hero) h2 {
 
 .retry-button:hover {
   background-color: var(--color-primary-dark);
+}
+
+/* 19. 프로젝트 언어 필터 */
+.project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0 24px;
+}
+
+.project-filters:empty {
+  display: none;
+}
+
+.project-filter-button {
+  padding: 8px 14px;
+
+  color: var(--color-muted);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+
+  transition:
+    color 0.2s,
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+.project-filter-button:hover,
+.project-filter-button.active {
+  color: var(--color-on-primary);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
 }
