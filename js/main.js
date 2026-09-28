@@ -347,7 +347,7 @@ formFields.forEach(({ input, error }) => {
 
 const githubUsername = "juny030507";
 
-const gitHubApiUrl = `https://api.github.com/users/${githubUsername}/repos?sort=updated&per_page=12`;
+const gitHubApiUrl = `https://api.github.com/users/${githubUsername}/repos?type=all&sort=updated&per_page=12`;
 
 const projectStatus = 
   document.querySelector("#project-status");
