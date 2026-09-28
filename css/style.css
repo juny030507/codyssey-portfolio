@@ -584,10 +584,6 @@ main section:not(.hero) h2 {
   flex-direction: column;
 }
 
-.project-card > p {
-  flex-grow: 1;
-}
-
 .project-meta {
   display: flex;
   justify-content: space-between;
@@ -600,13 +596,65 @@ main section:not(.hero) h2 {
 
 .project-link {
   align-self: flex-start;
-  margin-top: 20px;
+  margin-top: auto;
+  padding-top: 20px;
   color: var(--color-primary);
   font-weight: 700;
 }
 
 .project-link:hover {
   text-decoration: underline;
+}
+
+.project-languages,
+.project-language-note {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.project-languages h4 {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+}
+
+.project-languages ul {
+  display: grid;
+  gap: 12px;
+}
+
+.project-language-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+.project-language-row span:first-child {
+  min-width: 0;
+  color: var(--color-text);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.project-language-row span:last-child {
+  flex-shrink: 0;
+}
+
+.project-language-bar {
+  height: 6px;
+  margin-top: 5px;
+  overflow: hidden;
+  background-color: var(--color-border);
+  border-radius: 999px;
+}
+
+.project-language-bar span {
+  display: block;
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: inherit;
 }
 
 .retry-button {
