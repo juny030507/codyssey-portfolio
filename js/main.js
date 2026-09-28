@@ -440,9 +440,7 @@ const renderLanguageUsage = ({ languageUsage, languageStatus, language }) => {
           <span>${escapeHtml(name)}</span>
           <span>${escapeHtml(formatLanguagePercentage(percentage))} · ${formatLanguageBytes(bytes)}</span>
         </div>
-        <div class="project-language-bar" aria-hidden="true">
-          <span style="width: ${percentage.toFixed(2)}%"></span>
-        </div>
+        <progress class="project-language-bar" max="100" value="${percentage.toFixed(2)}" aria-hidden="true"></progress>
       </li>
     `).join("");
 

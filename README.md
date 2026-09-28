@@ -57,9 +57,21 @@ index.html          시맨틱 페이지 구조
 css/style.css       반응형 레이아웃과 테마
 js/main.js          이벤트, 상태, API, 폼 처리
 images/profile.svg  프로필 이니셜 일러스트
-screenshots/        데스크톱·모바일·다크 모드 화면
+screenshots/        현재 디자인의 데스크톱·모바일·다크 모드 화면
 ```
 
 ## 화면
 
-현재 디자인은 위 배포 주소에서 확인할 수 있습니다. `screenshots/`에는 최초 구현 당시의 데스크톱·모바일·다크 모드 캡처를 기록용으로 남겼습니다.
+아래 이미지는 현재 저장소 코드를 로컬 Chrome에서 실행해 캡처한 전체 페이지 화면입니다.
+
+### 데스크톱 (1440 × 900)
+
+![현재 디자인의 데스크톱 화면](screenshots/desktop.png)
+
+### 모바일 (500 × 844)
+
+![현재 디자인의 모바일 화면](screenshots/mobile.png)
+
+### 다크 모드 (1440 × 900)
+
+![현재 디자인의 다크 모드 화면](screenshots/dark.png)
